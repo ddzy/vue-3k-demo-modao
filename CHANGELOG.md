@@ -8,4 +8,4 @@
 
 ### Todo
 
-- 了解 vue 组件封装, 封装 animation dialog 组件
+- 了解 vue 组件封装, 封装类似单选的弹出层 dialog 组件
