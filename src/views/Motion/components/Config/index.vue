@@ -9,23 +9,30 @@
 					</div>
 
 					<!-- 右部值域区 -->
-					<div class="item-value-box">
-						<div class="item-value-main">
-							<div class="value-main-button-box">
-								<span class="value-button-text">
-									bounce
-								</span>
-								<span class="value-button-icon">
-									v
-								</span>
-							</div>
-							<div class="value-main-select-box">
-								<span class="value-select value-select-icon">
-									v
-								</span>
+					<base-select-tooltip
+						trigger="click"
+						placement="auto"
+						:data-source="activityTypeList"
+						@onChange="onActivityValueChange"
+					>
+						<div class="item-value-box" slot="trigger">
+							<div class="item-value-main">
+								<div class="value-main-button-box">
+									<span class="value-button-text">
+										{{ activityInputValue }}
+									</span>
+									<span class="value-button-icon">
+										v
+									</span>
+								</div>
+								<div class="value-main-select-box">
+									<span class="value-select value-select-icon">
+										v
+									</span>
+								</div>
 							</div>
 						</div>
-					</div>
+					</base-select-tooltip>
 				</li>
 				<li class="config-list-item">
 					<!-- 左部提示区 -->
@@ -34,19 +41,27 @@
 					</div>
 
 					<!-- 右部值域区 -->
-					<div class="item-value-box">
-						<div class="item-value-main">
-							<input
-								id="delay-value-show"
-								class="value-show"
-								type="text"
-								value="bounce"
-							/>
-							<label for="delay-value-show" class="value-select">
-								v
-							</label>
+					<base-select-tooltip
+						trigger="click"
+						placement="auto"
+						:data-source="delayTimeList"
+						@onChange="onDelayTimeValueChange"
+					>
+						<div class="item-value-box" slot="trigger">
+							<div class="item-value-main">
+								<input
+									id="delay-value-show"
+									class="value-show"
+									type="text"
+									v-model="delayTimeInputValue"
+									@focus="onDelayTimeInputFocus"
+								/>
+								<label for="delay-value-show" class="value-select">
+									v
+								</label>
+							</div>
 						</div>
-					</div>
+					</base-select-tooltip>
 				</li>
 				<li class="config-list-item">
 					<!-- 左部提示区 -->
@@ -55,19 +70,27 @@
 					</div>
 
 					<!-- 右部值域区 -->
-					<div class="item-value-box">
-						<div class="item-value-main">
-							<input
-								id="duration-value-show"
-								class="value-show"
-								type="text"
-								value="bounce"
-							/>
-							<label for="duration-value-show" class="value-select">
-								v
-							</label>
+					<base-select-tooltip
+						trigger="click"
+						placement="auto"
+						:data-source="durationTimeList"
+						@onChange="onDurationTimeValueChange"
+					>
+						<div class="item-value-box" slot="trigger">
+							<div class="item-value-main">
+								<input
+									id="duration-value-show"
+									class="value-show"
+									type="text"
+									v-model="durationTimeInputValue"
+									@focus="onDurationTimeInputFocus"
+								/>
+								<label for="duration-value-show" class="value-select">
+									v
+								</label>
+							</div>
 						</div>
-					</div>
+					</base-select-tooltip>
 				</li>
 				<li class="config-list-item">
 					<!-- 左部提示区 -->
@@ -76,19 +99,27 @@
 					</div>
 
 					<!-- 右部值域区 -->
-					<div class="item-value-box">
-						<div class="item-value-main">
-							<input
-								id="repeat-value-show"
-								class="value-show"
-								type="text"
-								value="bounce"
-							/>
-							<label for="repeat-value-show" class="value-select">
-								v
-							</label>
+					<base-select-tooltip
+						trigger="click"
+						placement="auto"
+						:data-source="repeatTimesList"
+						@onChange="onRepeatTimesValueChange"
+					>
+						<div class="item-value-box" slot="trigger">
+							<div class="item-value-main">
+								<input
+									id="repeat-value-show"
+									class="value-show"
+									type="text"
+									v-model="repeatTimesInputValue"
+									@focus="onRepeatTimesInputFocus"
+								/>
+								<label for="repeat-value-show" class="value-select">
+									v
+								</label>
+							</div>
 						</div>
-					</div>
+					</base-select-tooltip>
 				</li>
 			</ul>
 		</div>
@@ -96,10 +127,81 @@
 </template>
 
 <script>
+import BaseSelectToolTip from '@/components/Base/BaseSelectToolTip/index.vue'
+
 export default {
 	name: 'MotionConfig',
+	components: {
+		'base-select-tooltip': BaseSelectToolTip
+	},
+	props: {
+		activityTypeList: {
+			type: Array,
+			default: () => []
+		},
+		delayTimeList: {
+			type: Array,
+			default: () => []
+		},
+		durationTimeList: {
+			type: Array,
+			default: () => []
+		},
+		repeatTimesList: {
+			type: Array,
+			default: () => []
+		},
+
+		activityInputValue: {
+			type: String
+		},
+		delayTimeInputValue: {
+			type: String
+		},
+		durationTimeInputValue: {
+			type: String
+		},
+		repeatTimesInputValue: {
+			type: String
+		}
+	},
 	data() {
 		return {}
+	},
+	methods: {
+		onActivityValueChange(v) {
+			this.$emit('onActivityValueChange', v)
+		},
+		onDelayTimeInputFocus(e) {
+			const $target = e.target
+
+			if ($target) {
+				$target.select()
+			}
+		},
+		onDelayTimeValueChange(v) {
+			this.$emit('onDelayTimeValueChange', v)
+		},
+		onDurationTimeInputFocus(e) {
+			const $target = e.target
+
+			if ($target) {
+				$target.select()
+			}
+		},
+		onDurationTimeValueChange(v) {
+			this.$emit('onDurationTimeValueChange', v)
+		},
+		onRepeatTimesInputFocus(e) {
+			const $target = e.target
+
+			if ($target) {
+				$target.select()
+			}
+		},
+		onRepeatTimesValueChange(v) {
+			this.$emit('onRepeatTimesValueChange', v)
+		}
 	}
 }
 </script>
@@ -124,9 +226,9 @@ export default {
 				line-height: 30px;
 				transition: all 0.3s ease;
 				&:hover {
-          .config-item-value-box-hover;
-          .config-item-activity-button-icon-hover;
-          .config-item-activity-select-icon-hover;
+					.config-item-value-box-hover;
+					.config-item-activity-button-icon-hover;
+					.config-item-activity-select-icon-hover;
 				}
 			}
 			.item-value-main {
@@ -137,7 +239,7 @@ export default {
 					border: none;
 					font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
 						Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-          font-size: 14px;
+					font-size: 14px;
 					outline: none;
 					cursor: default;
 					&:focus {
@@ -159,18 +261,18 @@ export default {
 		// 动效条目
 		.config-item-activity {
 			.value-main-button-box {
-        box-sizing: border-box;
-        width: 212px;
-        text-align: left;
-        padding-left: 12px;
+				box-sizing: border-box;
+				width: 212px;
+				text-align: left;
+				padding-left: 12px;
 				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
 					Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-size: 14px;
-        color: #000;
-        .value-button-icon {
-          color: #666;
-          transition: all .3s ease;
-        }
+				font-size: 14px;
+				color: #000;
+				.value-button-icon {
+					color: #666;
+					transition: all 0.3s ease;
+				}
 			}
 
 			.value-main-select-box {
@@ -193,21 +295,21 @@ export default {
 		.value-select {
 			opacity: 1;
 		}
-  }
+	}
 
-  // 动效框的 button 小图标的 hover
-  .config-item-activity-button-icon-hover {
-    .value-button-icon {
-      opacity: 0;
-    }
-  }
+	// 动效框的 button 小图标的 hover
+	.config-item-activity-button-icon-hover {
+		.value-button-icon {
+			opacity: 0;
+		}
+	}
 
-  // 动效框的 select 小图标的 hover
-  .config-item-activity-select-icon-hover {
-    .value-select-icon {
-      transform: rotateZ(180deg);
-    }
-  }
+	// 动效框的 select 小图标的 hover
+	.config-item-activity-select-icon-hover {
+		.value-select-icon {
+			transform: rotateZ(180deg);
+		}
+	}
 
 	// 右侧外框的输入框 focus
 	.config-item-value-show-focus {
