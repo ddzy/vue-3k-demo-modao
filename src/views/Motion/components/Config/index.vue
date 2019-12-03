@@ -128,39 +128,49 @@
 
 <script>
 import BaseSelectToolTip from '@/components/Base/BaseSelectToolTip/index.vue'
-import {
-	DEFAULT_ANIMATION_TYPE_LIST,
-	DEFAULT_ANIMATION_DELAY_TIME_LIST,
-	DEFAULT_ANIMATION_DURATION_TIME_LIST,
-	DEFAULT_ANIMATION_REPEAT_TIMES_LIST
-} from '../../constants/index'
 
 export default {
 	name: 'MotionConfig',
-	data() {
-		return {
-			// 动效类型列表
-			activityTypeList: DEFAULT_ANIMATION_TYPE_LIST.slice(),
-			// 延迟时间列表
-			delayTimeList: DEFAULT_ANIMATION_DELAY_TIME_LIST.slice(),
-			// 持续时长列表
-			durationTimeList: DEFAULT_ANIMATION_DURATION_TIME_LIST.slice(),
-			// 重复次数列表
-			repeatTimesList: DEFAULT_ANIMATION_REPEAT_TIMES_LIST.slice(),
+	components: {
+		'base-select-tooltip': BaseSelectToolTip
+	},
+	props: {
+		activityTypeList: {
+			type: Array,
+			default: () => []
+		},
+		delayTimeList: {
+			type: Array,
+			default: () => []
+		},
+		durationTimeList: {
+			type: Array,
+			default: () => []
+		},
+		repeatTimesList: {
+			type: Array,
+			default: () => []
+		},
 
-			// 动效输入框的值
-			activityInputValue: DEFAULT_ANIMATION_TYPE_LIST[0],
-			// 延迟时间输入框的值
-			delayTimeInputValue: DEFAULT_ANIMATION_DELAY_TIME_LIST[0],
-			// 持续时长输入框的值
-			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[0],
-			// 重复次数输入框的值
-			repeatTimesInputValue: DEFAULT_ANIMATION_REPEAT_TIMES_LIST[0]
+		activityInputValue: {
+			type: String
+		},
+		delayTimeInputValue: {
+			type: String
+		},
+		durationTimeInputValue: {
+			type: String
+		},
+		repeatTimesInputValue: {
+			type: String
 		}
+	},
+	data() {
+		return {}
 	},
 	methods: {
 		onActivityValueChange(v) {
-			this.activityInputValue = v
+			this.$emit('onActivityValueChange', v)
 		},
 		onDelayTimeInputFocus(e) {
 			const $target = e.target
@@ -170,7 +180,7 @@ export default {
 			}
 		},
 		onDelayTimeValueChange(v) {
-			this.delayTimeInputValue = v
+			this.$emit('onDelayTimeValueChange', v)
 		},
 		onDurationTimeInputFocus(e) {
 			const $target = e.target
@@ -180,7 +190,7 @@ export default {
 			}
 		},
 		onDurationTimeValueChange(v) {
-			this.durationTimeInputValue = v
+			this.$emit('onDurationTimeValueChange', v)
 		},
 		onRepeatTimesInputFocus(e) {
 			const $target = e.target
@@ -190,11 +200,8 @@ export default {
 			}
 		},
 		onRepeatTimesValueChange(v) {
-			this.repeatTimesInputValue = v
+			this.$emit('onRepeatTimesValueChange', v)
 		}
-	},
-	components: {
-		'base-select-tooltip': BaseSelectToolTip
 	}
 }
 </script>
