@@ -1,20 +1,12 @@
 /* 默认的动画类型列表 */
 export const DEFAULT_ANIMATION_TYPE_LIST = [
-	'bounce',
-	'flash',
-	'pulse',
-	'shake',
-	'fadeIn',
-	'fadeInDown',
-	'rotateIn',
-	'rotateOut',
-	'rotateInUpLeft',
-	'zoomIn',
-	'zoomInLeft',
-	'zoomOut',
-	'slideIn',
-	'slideInLeft',
-	'slideInRight'
+	'swap',
+	'puffIn',
+	'vanishIn',
+	'vanishOut',
+	'rotateUp',
+	'foolishIn',
+	'tinDownOut'
 ]
 
 /* 默认的动画延迟时间列表 */

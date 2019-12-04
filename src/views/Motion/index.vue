@@ -18,7 +18,12 @@
 			/>
 
 			<!-- 预览区块 -->
-			<MotionPreview />
+			<MotionPreview
+				:activity-type="activityInputValue"
+				:delay-time="delayTimeInputValue"
+				:duration-time="durationTimeInputValue"
+				:repeat-times="repeatTimesInputValue"
+			/>
 		</div>
 	</div>
 </template>
@@ -51,11 +56,11 @@ export default {
 			repeatTimesList: DEFAULT_ANIMATION_REPEAT_TIMES_LIST.slice(),
 
 			// 动效输入框的值
-			activityInputValue: DEFAULT_ANIMATION_TYPE_LIST[0],
+			activityInputValue: DEFAULT_ANIMATION_TYPE_LIST[2],
 			// 延迟时间输入框的值
 			delayTimeInputValue: DEFAULT_ANIMATION_DELAY_TIME_LIST[0],
 			// 持续时长输入框的值
-			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[0],
+			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[3],
 			// 重复次数输入框的值
 			repeatTimesInputValue: DEFAULT_ANIMATION_REPEAT_TIMES_LIST[0]
 		}
