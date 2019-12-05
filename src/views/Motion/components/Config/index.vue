@@ -221,14 +221,13 @@ export default {
 				}
 			}
 			.item-value-box {
-				margin-left: 20px;
 				border: 1px solid transparent;
 				line-height: 30px;
 				transition: all 0.3s ease;
 				&:hover {
 					.config-item-value-box-hover;
 					.config-item-activity-button-icon-hover;
-					.config-item-activity-select-icon-hover;
+					// .config-item-activity-select-icon-hover;
 				}
 			}
 			.item-value-main {
@@ -305,11 +304,11 @@ export default {
 	}
 
 	// 动效框的 select 小图标的 hover
-	.config-item-activity-select-icon-hover {
-		.value-select-icon {
-			transform: rotateZ(180deg);
-		}
-	}
+	// .config-item-activity-select-icon-hover {
+	// 	.value-select-icon {
+	// 		transform: rotateZ(180deg);
+	// 	}
+	// }
 
 	// 右侧外框的输入框 focus
 	.config-item-value-show-focus {
