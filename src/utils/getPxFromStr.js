@@ -7,15 +7,15 @@
  * @returns {number} 返回像素值
  */
 function _getPxFromStr(text) {
-  let result = 0;
+	let result = 0
 
-  const $span = document.createElement('span')
-  $span.innerText = text
-  document.body.appendChild($span);
-  result = $span.offsetWidth;
-  document.body.removeChild($span);
+	const $span = document.createElement('span')
+	$span.innerText = text
+	document.body.appendChild($span)
+	result = $span.offsetWidth
+	document.body.removeChild($span)
 
-  return result;
+	return result
 }
 
 export default _getPxFromStr

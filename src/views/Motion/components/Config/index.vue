@@ -315,11 +315,11 @@ export default {
 	mounted() {
 		// 设置初始的偏移量
 		this.delayTimeInputSuffixOffset =
-			_getPxFromStr(this.delayTimeInputValue) + 10
+			_getPxFromStr(this.delayTimeInputValue) + 12
 		this.durationTimeInputSuffixOffset =
-			_getPxFromStr(this.durationTimeInputValue) + 10
+			_getPxFromStr(this.durationTimeInputValue) + 12
 		this.repeatTimesInputSuffixOffset =
-			_getPxFromStr(this.repeatTimesInputValue) + 10
+			_getPxFromStr(this.repeatTimesInputValue) + 12
 	}
 }
 </script>

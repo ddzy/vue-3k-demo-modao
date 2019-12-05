@@ -142,10 +142,10 @@ export default {
 
 							// TODO: 忽略输入框和输入框后缀, 两者是改变值的另一个途径
 							if (
-								$target.classList.contains('value-show')
-								&& $target.tagName === 'INPUT'
-								|| $target.classList.contains('value-suffix')
-								&& $target.tagName === 'SPAN'
+								($target.classList.contains('value-show') &&
+									$target.tagName === 'INPUT') ||
+								($target.classList.contains('value-suffix') &&
+									$target.tagName === 'SPAN')
 							) {
 								this.onClose()
 							} else if (

@@ -7,17 +7,17 @@
  * @returns {string} 返回转化后的字符串
  */
 function _trim(text) {
-  let result = '';
+	let result = ''
 
-  if (text.trim) {
-    result = text.trim();
-  } else {
-    const RegExp_space = /(^\s+)|(\s+$)/g;
+	if (text.trim) {
+		result = text.trim()
+	} else {
+		const RegExp_space = /(^\s+)|(\s+$)/g
 
-    result = text.replace(RegExp_space, '');
-  }
+		result = text.replace(RegExp_space, '')
+	}
 
-  return result;
+	return result
 }
 
-export default _trim;
+export default _trim
