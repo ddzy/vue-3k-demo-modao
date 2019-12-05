@@ -7,13 +7,28 @@
 			</div>
 
 			<!-- 弹出层区 -->
-			<div
+			<!-- <div
 				class="tooltip-modal-box"
 				ref="tooltip"
 				:style="{
 					display: isVisible ? 'block' : 'none'
 				}"
 			>
+				<div class="tooltip-modal-content">
+					<ul class="tooltip-main-content-list">
+						<li
+							class="tooltip-main-content-item"
+							:key="i"
+							@click="onTooltipItemClick(v)"
+							v-for="(v, i) in dataSource"
+						>
+							{{ v }}
+						</li>
+					</ul>
+				</div>
+			</div> -->
+
+			<div class="tooltip-modal-box" ref="tooltip" v-if="isVisible">
 				<div class="tooltip-modal-content">
 					<ul class="tooltip-main-content-list">
 						<li
@@ -51,6 +66,9 @@ export default {
 		placement: {
 			type: String,
 			default: 'auto'
+		},
+		currentValue: {
+			type: String
 		}
 	},
 	data() {
@@ -74,22 +92,17 @@ export default {
 		}
 	},
 	watch: {
-		isVisible(visible) {
-			if (visible) {
+		isVisible() {
+			this.$nextTick(() => {
 				const $trigger = this.$refs.trigger
 				const $tooltip = this.$refs.tooltip
 
 				if ($trigger && $tooltip) {
-					const $currentSelectedValueWrapper = $trigger.querySelector(
-						'.value-button-text'
-					)
 					const $currentValueList = $tooltip.querySelectorAll(
 						'.tooltip-main-content-item'
 					)
 					// 当前输入框的值, 也就是上次选中的值
-					const currentSelectedValue = $currentSelectedValueWrapper
-						? _trim($currentSelectedValueWrapper.innerText)
-						: ''
+					const currentSelectedValue = this.currentValue
 
 					for (const [i, v] of $currentValueList.entries()) {
 						const pendingSelectValue = _trim(v.innerText)
@@ -103,32 +116,24 @@ export default {
 					}
 
 					// TODO: 计算弹出层位置 & 弹出层列表项的样式信息
-					this.$nextTick(() => {
-						const $relativeDOM = this.relativeFieldObj.dom
-						const relativeDOMCurrentHeight = $relativeDOM.clientHeight
-						const relativeDOMPosition = this.relativeFieldObj.index
+					const $relativeDOM = this.relativeFieldObj.dom
+					const relativeDOMCurrentHeight = $relativeDOM.clientHeight
+					const relativeDOMPosition = this.relativeFieldObj.index
 
-						const tooltipStyleObj = {
-							top: `-${relativeDOMCurrentHeight * relativeDOMPosition}px`
-						}
-						const convertedTooltipStyleText = _convertObjToCSSText(
-							tooltipStyleObj
-						)
+					const tooltipStyleObj = {
+						top: `-${relativeDOMCurrentHeight * relativeDOMPosition}px`
+					}
+					const convertedTooltipStyleText = _convertObjToCSSText(
+						tooltipStyleObj
+					)
 
-						// 设置弹出层整体的位置
-						$tooltip.style.cssText += convertedTooltipStyleText
-						// 设置弹出层内部被默认选中的项的样式
-						// 要在弹出层关闭时移除该样式
-						$relativeDOM.classList.add('tooltip-default-selected')
-					})
+					// 设置弹出层整体的位置
+					$tooltip.style.cssText += convertedTooltipStyleText
+					// 设置弹出层内部被默认选中的项的样式
+					// 要在弹出层关闭时移除该样式
+					$relativeDOM.classList.add('tooltip-default-selected')
 				}
-			} else {
-				const $relativeDOM = this.relativeFieldObj.dom
-
-				if ($relativeDOM) {
-					$relativeDOM.classList.remove('tooltip-default-selected')
-				}
-			}
+			})
 		}
 	},
 	methods: {
@@ -221,7 +226,7 @@ export default {
 		position: relative;
 		box-sizing: border-box;
 		.tooltip-modal-box {
-			display: none;
+			// display: none;
 			position: absolute;
 			z-index: 999;
 			width: 100%;

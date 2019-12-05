@@ -13,6 +13,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="activityTypeList"
+						:current-value="activityInputValue"
 						@onChange="onActivityValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -45,6 +46,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="delayTimeList"
+						:current-value="delayTimeInputValue"
 						@onChange="onDelayTimeValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -74,6 +76,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="durationTimeList"
+						:current-value="durationTimeInputValue"
 						@onChange="onDurationTimeValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -103,6 +106,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="repeatTimesList"
+						:current-value="repeatTimesInputValue"
 						@onChange="onRepeatTimesValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
