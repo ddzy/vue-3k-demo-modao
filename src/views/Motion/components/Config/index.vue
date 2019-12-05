@@ -142,7 +142,7 @@
 <script>
 import BaseSelectToolTip from '@/components/Base/BaseSelectToolTip/index.vue'
 import _convertObjToCSSText from '@/utils/convertObjToCSSText'
-import _getPxFromStr from '@/utils/getPxFromStr';
+import _getPxFromStr from '@/utils/getPxFromStr'
 
 export default {
 	name: 'MotionConfig',
@@ -210,11 +210,11 @@ export default {
 			// 同步 props 与 state
 			this.p_delayTimeInputValue = v
 			// 更新输入框后缀的位置
-			this.delayTimeInputSuffixOffset = _getPxFromStr(v) + 12;
+			this.delayTimeInputSuffixOffset = _getPxFromStr(v) + 12
 		},
 		durationTimeInputValue(v) {
 			this.p_durationTimeInputValue = v
-			this.durationTimeInputSuffixOffset = _getPxFromStr(v) + 12;
+			this.durationTimeInputSuffixOffset = _getPxFromStr(v) + 12
 		},
 		repeatTimesInputValue(v) {
 			this.p_repeatTimesInputValue = v
@@ -243,7 +243,7 @@ export default {
 
 				$durationSuffix.style.cssText += convertedStyleText
 			}
-		},
+		}
 	},
 	methods: {
 		onReplaceNumWithEmptyStr(v) {
@@ -314,10 +314,13 @@ export default {
 	},
 	mounted() {
 		// 设置初始的偏移量
-		this.delayTimeInputSuffixOffset = _getPxFromStr(this.delayTimeInputValue) + 10;
-		this.durationTimeInputSuffixOffset = _getPxFromStr(this.durationTimeInputValue) + 10;
-		this.repeatTimesInputSuffixOffset = _getPxFromStr(this.repeatTimesInputValue) + 10;
-	},
+		this.delayTimeInputSuffixOffset =
+			_getPxFromStr(this.delayTimeInputValue) + 10
+		this.durationTimeInputSuffixOffset =
+			_getPxFromStr(this.durationTimeInputValue) + 10
+		this.repeatTimesInputSuffixOffset =
+			_getPxFromStr(this.repeatTimesInputValue) + 10
+	}
 }
 </script>
 
@@ -330,12 +333,14 @@ export default {
 			cursor: default;
 
 			.item-tip-box {
+				width: 40px;
 				line-height: 30px;
 				span.item-tip-text {
 					color: #999;
 				}
 			}
 			.item-value-box {
+				width: 260px;
 				border: 1px solid transparent;
 				line-height: 30px;
 				transition: all 0.3s ease;
@@ -349,6 +354,7 @@ export default {
 				position: relative;
 				input.value-show {
 					display: block;
+					width: 200px;
 					padding: 6px 12px;
 					border: none;
 					font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -367,7 +373,8 @@ export default {
 				}
 				span.value-select {
 					display: block;
-					width: 28px;
+					width: 48px;
+					margin-left: 2px;
 					background-color: #ededed;
 					color: #666;
 					opacity: 0;
@@ -397,7 +404,7 @@ export default {
 			.value-main-select-box {
 				span.value-select {
 					display: block;
-					width: 28px;
+					width: 48px;
 					background-color: #fff;
 					color: #666;
 					opacity: 0;
@@ -422,13 +429,6 @@ export default {
 			opacity: 0;
 		}
 	}
-
-	// 动效框的 select 小图标的 hover
-	// .config-item-activity-select-icon-hover {
-	// 	.value-select-icon {
-	// 		transform: rotateZ(180deg);
-	// 	}
-	// }
 
 	// 右侧外框的输入框 focus
 	.config-item-value-show-focus {
