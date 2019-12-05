@@ -58,9 +58,9 @@
 									v-model="delayTimeInputValue"
 									@focus="onDelayTimeInputFocus"
 								/>
-								<label for="delay-value-show" class="value-select">
+								<span for="delay-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -88,9 +88,9 @@
 									v-model="durationTimeInputValue"
 									@focus="onDurationTimeInputFocus"
 								/>
-								<label for="duration-value-show" class="value-select">
+								<span for="duration-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -118,9 +118,9 @@
 									v-model="repeatTimesInputValue"
 									@focus="onRepeatTimesInputFocus"
 								/>
-								<label for="repeat-value-show" class="value-select">
+								<span for="repeat-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -249,7 +249,7 @@ export default {
 						.config-item-value-show-focus;
 					}
 				}
-				label.value-select {
+				span.value-select {
 					display: block;
 					width: 28px;
 					background-color: #ededed;

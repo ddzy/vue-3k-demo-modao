@@ -7,27 +7,6 @@
 			</div>
 
 			<!-- 弹出层区 -->
-			<!-- <div
-				class="tooltip-modal-box"
-				ref="tooltip"
-				:style="{
-					display: isVisible ? 'block' : 'none'
-				}"
-			>
-				<div class="tooltip-modal-content">
-					<ul class="tooltip-main-content-list">
-						<li
-							class="tooltip-main-content-item"
-							:key="i"
-							@click="onTooltipItemClick(v)"
-							v-for="(v, i) in dataSource"
-						>
-							{{ v }}
-						</li>
-					</ul>
-				</div>
-			</div> -->
-
 			<div class="tooltip-modal-box" ref="tooltip" v-if="isVisible">
 				<div class="tooltip-modal-content">
 					<ul class="tooltip-main-content-list">
@@ -160,10 +139,16 @@ export default {
 						e => {
 							let $target = e.target
 
-							// 点击空白区域关闭弹框
-							if ($target === $trigger || _isParentDOM($trigger, $target)) {
+							// TODO: 忽略输入框, 输入框是改变值的另一个途径
+							if ($target.classList.contains('value-show') && $target.tagName === 'INPUT') {
+								this.onClose()
+							} else if (
+								$target === $trigger ||
+								_isParentDOM($trigger, $target)
+							) {
 								this.onOpen()
 							} else {
+								// TODO: 点击空白区域关闭弹框
 								this.onClose()
 							}
 						}
