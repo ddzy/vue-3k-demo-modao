@@ -139,8 +139,13 @@ export default {
 						e => {
 							let $target = e.target
 
-							// TODO: 忽略输入框, 输入框是改变值的另一个途径
-							if ($target.classList.contains('value-show') && $target.tagName === 'INPUT') {
+							// TODO: 忽略输入框和输入框后缀, 两者是改变值的另一个途径
+							if (
+								$target.classList.contains('value-show')
+								&& $target.tagName === 'INPUT'
+								|| $target.classList.contains('value-suffix')
+								&& $target.tagName === 'SPAN'
+							) {
 								this.onClose()
 							} else if (
 								$target === $trigger ||
@@ -211,7 +216,6 @@ export default {
 		position: relative;
 		box-sizing: border-box;
 		.tooltip-modal-box {
-			// display: none;
 			position: absolute;
 			z-index: 999;
 			width: 100%;

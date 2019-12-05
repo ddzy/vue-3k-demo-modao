@@ -15,6 +15,9 @@
 				@onDelayTimeValueChange="onDelayTimeValueChange"
 				@onDurationTimeValueChange="onDurationTimeValueChange"
 				@onRepeatTimesValueChange="onRepeatTimesValueChange"
+				@onDelayTimeInputChange="onDelayTimeInputChange"
+				@onDurationTimeInputChange="onDurationTimeInputChange"
+				@onRepeatTimesInputChange="onRepeatTimesInputChange"
 			/>
 
 			<!-- 预览区块 -->
@@ -62,7 +65,7 @@ export default {
 			// 持续时长输入框的值
 			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[3],
 			// 重复次数输入框的值
-			repeatTimesInputValue: DEFAULT_ANIMATION_REPEAT_TIMES_LIST[0]
+			repeatTimesInputValue: DEFAULT_ANIMATION_REPEAT_TIMES_LIST[0],
 		}
 	},
 	methods: {
@@ -76,6 +79,16 @@ export default {
 			this.durationTimeInputValue = v
 		},
 		onRepeatTimesValueChange(v) {
+			this.repeatTimesInputValue = v
+		},
+
+		onDelayTimeInputChange(v) {
+			this.delayTimeInputValue = v;
+		},
+		onDurationTimeInputChange(v) {
+			this.durationTimeInputValue = v
+		},
+		onRepeatTimesInputChange(v) {
 			this.repeatTimesInputValue = v
 		}
 	}

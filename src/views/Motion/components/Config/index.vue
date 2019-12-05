@@ -55,9 +55,13 @@
 									id="delay-value-show"
 									class="value-show"
 									type="text"
-									v-model="delayTimeInputValue"
+									v-model="p_delayTimeInputValue"
 									@focus="onDelayTimeInputFocus"
+									@input="onDelayTimeInputChange"
 								/>
+								<span class="value-suffix" ref="delaySuffix">
+									ms
+								</span>
 								<span for="delay-value-show" class="value-select">
 									v
 								</span>
@@ -85,9 +89,13 @@
 									id="duration-value-show"
 									class="value-show"
 									type="text"
-									v-model="durationTimeInputValue"
+									v-model="p_durationTimeInputValue"
 									@focus="onDurationTimeInputFocus"
+									@input="onDurationTimeInputChange"
 								/>
+								<span class="value-suffix" ref="durationSuffix">
+									ms
+								</span>
 								<span for="duration-value-show" class="value-select">
 									v
 								</span>
@@ -115,8 +123,9 @@
 									id="repeat-value-show"
 									class="value-show"
 									type="text"
-									v-model="repeatTimesInputValue"
+									v-model="p_repeatTimesInputValue"
 									@focus="onRepeatTimesInputFocus"
+									@input="onRepeatTimesInputChange"
 								/>
 								<span for="repeat-value-show" class="value-select">
 									v
@@ -132,6 +141,8 @@
 
 <script>
 import BaseSelectToolTip from '@/components/Base/BaseSelectToolTip/index.vue'
+import _convertObjToCSSText from '@/utils/convertObjToCSSText'
+import _getPxFromStr from '@/utils/getPxFromStr';
 
 export default {
 	name: 'MotionConfig',
@@ -168,11 +179,78 @@ export default {
 		repeatTimesInputValue: {
 			type: String
 		}
+
+		// delayTimeInputSuffixOffset: {
+		// 	type: Number
+		// },
+		// durationTimeInputSuffixOffset: {
+		// 	type: Number
+		// },
+		// repeatTimesInputSuffixOffset: {
+		// 	type: Number
+		// }
 	},
 	data() {
-		return {}
+		return {
+			// 延时输入框后缀的偏移量
+			delayTimeInputSuffixOffset: 0,
+			// 持续时间输入框后缀的偏移量
+			durationTimeInputSuffixOffset: 0,
+			// 重复次数输入框后缀的偏移量
+			repeatTimesInputSuffixOffset: 0,
+
+			// 与 props 区分, 便于双向更新值
+			p_delayTimeInputValue: this.delayTimeInputValue,
+			p_durationTimeInputValue: this.durationTimeInputValue,
+			p_repeatTimesInputValue: this.repeatTimesInputValue
+		}
+	},
+	watch: {
+		delayTimeInputValue(v) {
+			// 同步 props 与 state
+			this.p_delayTimeInputValue = v
+			// 更新输入框后缀的位置
+			this.delayTimeInputSuffixOffset = _getPxFromStr(v) + 12;
+		},
+		durationTimeInputValue(v) {
+			this.p_durationTimeInputValue = v
+			this.durationTimeInputSuffixOffset = _getPxFromStr(v) + 12;
+		},
+		repeatTimesInputValue(v) {
+			this.p_repeatTimesInputValue = v
+		},
+		delayTimeInputSuffixOffset(v) {
+			// 设置输入框后缀的样式
+			const $delaySuffix = this.$refs.delaySuffix
+
+			if ($delaySuffix) {
+				const styleObj = {
+					left: `${v}px`
+				}
+				const convertedStyleText = _convertObjToCSSText(styleObj)
+
+				$delaySuffix.style.cssText += convertedStyleText
+			}
+		},
+		durationTimeInputSuffixOffset(v) {
+			const $durationSuffix = this.$refs.durationSuffix
+
+			if ($durationSuffix) {
+				const styleObj = {
+					left: `${v}px`
+				}
+				const convertedStyleText = _convertObjToCSSText(styleObj)
+
+				$durationSuffix.style.cssText += convertedStyleText
+			}
+		},
 	},
 	methods: {
+		onReplaceNumWithEmptyStr(v) {
+			const RegExp_num = /\D/g
+
+			return `${v}`.replace(RegExp_num, '')
+		},
 		onActivityValueChange(v) {
 			this.$emit('onActivityValueChange', v)
 		},
@@ -186,6 +264,13 @@ export default {
 		onDelayTimeValueChange(v) {
 			this.$emit('onDelayTimeValueChange', v)
 		},
+		onDelayTimeInputChange() {
+			this.p_delayTimeInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_delayTimeInputValue
+			)
+
+			this.$emit('onDelayTimeInputChange', this.p_delayTimeInputValue)
+		},
 		onDurationTimeInputFocus(e) {
 			const $target = e.target
 
@@ -196,6 +281,13 @@ export default {
 		onDurationTimeValueChange(v) {
 			this.$emit('onDurationTimeValueChange', v)
 		},
+		onDurationTimeInputChange() {
+			this.p_durationTimeInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_durationTimeInputValue
+			)
+
+			this.$emit('onDurationTimeInputChange', this.p_durationTimeInputValue)
+		},
 		onRepeatTimesInputFocus(e) {
 			const $target = e.target
 
@@ -205,8 +297,21 @@ export default {
 		},
 		onRepeatTimesValueChange(v) {
 			this.$emit('onRepeatTimesValueChange', v)
+		},
+		onRepeatTimesInputChange() {
+			this.p_repeatTimesInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_repeatTimesInputValue
+			)
+
+			this.$emit('onRepeatTimesInputChange', this.p_repeatTimesInputValue)
 		}
-	}
+	},
+	mounted() {
+		// 设置初始的偏移量
+		this.delayTimeInputSuffixOffset = _getPxFromStr(this.delayTimeInputValue) + 10;
+		this.durationTimeInputSuffixOffset = _getPxFromStr(this.durationTimeInputValue) + 10;
+		this.repeatTimesInputSuffixOffset = _getPxFromStr(this.repeatTimesInputValue) + 10;
+	},
 }
 </script>
 
@@ -231,11 +336,11 @@ export default {
 				&:hover {
 					.config-item-value-box-hover;
 					.config-item-activity-button-icon-hover;
-					// .config-item-activity-select-icon-hover;
 				}
 			}
 			.item-value-main {
 				display: flex;
+				position: relative;
 				input.value-show {
 					display: block;
 					padding: 6px 12px;
@@ -248,6 +353,11 @@ export default {
 					&:focus {
 						.config-item-value-show-focus;
 					}
+				}
+				span.value-suffix {
+					position: absolute;
+					left: 12px;
+					color: #5b6b73;
 				}
 				span.value-select {
 					display: block;
