@@ -7,13 +7,7 @@
 			</div>
 
 			<!-- 弹出层区 -->
-			<div
-				class="tooltip-modal-box"
-				ref="tooltip"
-				:style="{
-					display: isVisible ? 'block' : 'none'
-				}"
-			>
+			<div class="tooltip-modal-box" ref="tooltip" v-if="isVisible">
 				<div class="tooltip-modal-content">
 					<ul class="tooltip-main-content-list">
 						<li
@@ -34,6 +28,8 @@
 <script>
 import _eventListener from '@/utils/eventListener'
 import _isParentDOM from '@/utils/isParentDOM'
+import _convertObjToCSSText from '@/utils/convertObjToCSSText'
+import _trim from '@/utils/trim'
 
 export default {
 	props: {
@@ -42,22 +38,23 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		// TODO 暂时只对应墨刀的要求, 实现 click 方式
 		trigger: {
 			type: String,
 			default: 'click'
 		},
-		// TODO 目前采用 auto 的方式, 根据墨刀的要求, 需要自行计算
 		placement: {
 			type: String,
 			default: 'auto'
+		},
+		currentValue: {
+			type: String
 		}
 	},
 	data() {
 		return {
-			// 是否显示 tooltip
+			// 是否显示弹出框
 			isVisible: false,
-			// 出现的位置
+			// 弹出框出现的位置
 			position: {
 				left: 0,
 				top: 0
@@ -65,18 +62,58 @@ export default {
 			// 触发的事件句柄
 			mouseEnterEventHandler: null,
 			mouseLeaveEventHandler: null,
-			clickEventHandler: null
+			clickEventHandler: null,
+			// 基准 DOM 元素的信息, 根据该信息来计算弹出框的位置
+			relativeFieldObj: {
+				dom: document.createElement('div'),
+				index: 0
+			}
 		}
 	},
 	watch: {
-		/**
-		 * 计算弹出层位置信息
-		 */
-		isVisible(visible) {
-			if (visible) {
-				// TODO 计算位置信息
-				console.log('TODO: 动态计算弹出框的位置');
-			}
+		isVisible() {
+			this.$nextTick(() => {
+				const $trigger = this.$refs.trigger
+				const $tooltip = this.$refs.tooltip
+
+				if ($trigger && $tooltip) {
+					const $currentValueList = $tooltip.querySelectorAll(
+						'.tooltip-main-content-item'
+					)
+					// 当前输入框的值, 也就是上次选中的值
+					const currentSelectedValue = this.currentValue
+
+					for (const [i, v] of $currentValueList.entries()) {
+						// 去除 ms, 因为在选择条目之时, 已经过滤掉了 ms
+						const pendingSelectValue = _trim(v.innerText.replace('ms', ''))
+
+						if (pendingSelectValue === currentSelectedValue) {
+							this.relativeFieldObj.dom = v
+							this.relativeFieldObj.index = i
+
+							break
+						}
+					}
+
+					// TODO: 计算弹出层位置 & 弹出层列表项的样式信息
+					const $relativeDOM = this.relativeFieldObj.dom
+					const relativeDOMCurrentHeight = $relativeDOM.clientHeight
+					const relativeDOMPosition = this.relativeFieldObj.index
+
+					const tooltipStyleObj = {
+						top: `-${relativeDOMCurrentHeight * relativeDOMPosition}px`
+					}
+					const convertedTooltipStyleText = _convertObjToCSSText(
+						tooltipStyleObj
+					)
+
+					// 设置弹出层整体的位置
+					$tooltip.style.cssText += convertedTooltipStyleText
+					// 设置弹出层内部被默认选中的项的样式
+					// 要在弹出层关闭时移除该样式
+					$relativeDOM.classList.add('tooltip-default-selected')
+				}
+			})
 		}
 	},
 	methods: {
@@ -103,10 +140,21 @@ export default {
 						e => {
 							let $target = e.target
 
-              // 点击空白区域关闭弹框
-							if ($target === $trigger || _isParentDOM($trigger, $target)) {
+							// TODO: 忽略输入框和输入框后缀, 两者是改变值的另一个途径
+							if (
+								($target.classList.contains('value-show') &&
+									$target.tagName === 'INPUT') ||
+								($target.classList.contains('value-suffix') &&
+									$target.tagName === 'SPAN')
+							) {
+								this.onClose()
+							} else if (
+								$target === $trigger ||
+								_isParentDOM($trigger, $target)
+							) {
 								this.onOpen()
 							} else {
+								// TODO: 点击空白区域关闭弹框
 								this.onClose()
 							}
 						}
@@ -163,13 +211,12 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #cBaseSelectToolTip {
 	.tooltip-wrapper {
 		position: relative;
 		box-sizing: border-box;
 		.tooltip-modal-box {
-			display: none;
 			position: absolute;
 			z-index: 999;
 			width: 100%;
@@ -187,6 +234,11 @@ export default {
 				}
 			}
 		}
+	}
+
+	// 弹出框默认被选中的条目的样式
+	.tooltip-default-selected {
+		background-color: #415058 !important;
 	}
 }
 </style>

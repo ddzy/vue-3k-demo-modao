@@ -13,6 +13,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="activityTypeList"
+						:current-value="activityInputValue"
 						@onChange="onActivityValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -45,6 +46,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="delayTimeList"
+						:current-value="delayTimeInputValue"
 						@onChange="onDelayTimeValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -53,12 +55,16 @@
 									id="delay-value-show"
 									class="value-show"
 									type="text"
-									v-model="delayTimeInputValue"
+									v-model="p_delayTimeInputValue"
 									@focus="onDelayTimeInputFocus"
+									@input="onDelayTimeInputChange"
 								/>
-								<label for="delay-value-show" class="value-select">
+								<span class="value-suffix" ref="delaySuffix">
+									ms
+								</span>
+								<span for="delay-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -74,6 +80,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="durationTimeList"
+						:current-value="durationTimeInputValue"
 						@onChange="onDurationTimeValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -82,12 +89,16 @@
 									id="duration-value-show"
 									class="value-show"
 									type="text"
-									v-model="durationTimeInputValue"
+									v-model="p_durationTimeInputValue"
 									@focus="onDurationTimeInputFocus"
+									@input="onDurationTimeInputChange"
 								/>
-								<label for="duration-value-show" class="value-select">
+								<span class="value-suffix" ref="durationSuffix">
+									ms
+								</span>
+								<span for="duration-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -103,6 +114,7 @@
 						trigger="click"
 						placement="auto"
 						:data-source="repeatTimesList"
+						:current-value="repeatTimesInputValue"
 						@onChange="onRepeatTimesValueChange"
 					>
 						<div class="item-value-box" slot="trigger">
@@ -111,12 +123,13 @@
 									id="repeat-value-show"
 									class="value-show"
 									type="text"
-									v-model="repeatTimesInputValue"
+									v-model="p_repeatTimesInputValue"
 									@focus="onRepeatTimesInputFocus"
+									@input="onRepeatTimesInputChange"
 								/>
-								<label for="repeat-value-show" class="value-select">
+								<span for="repeat-value-show" class="value-select">
 									v
-								</label>
+								</span>
 							</div>
 						</div>
 					</base-select-tooltip>
@@ -128,6 +141,8 @@
 
 <script>
 import BaseSelectToolTip from '@/components/Base/BaseSelectToolTip/index.vue'
+import _convertObjToCSSText from '@/utils/convertObjToCSSText'
+import _getPxFromStr from '@/utils/getPxFromStr'
 
 export default {
 	name: 'MotionConfig',
@@ -164,11 +179,78 @@ export default {
 		repeatTimesInputValue: {
 			type: String
 		}
+
+		// delayTimeInputSuffixOffset: {
+		// 	type: Number
+		// },
+		// durationTimeInputSuffixOffset: {
+		// 	type: Number
+		// },
+		// repeatTimesInputSuffixOffset: {
+		// 	type: Number
+		// }
 	},
 	data() {
-		return {}
+		return {
+			// 延时输入框后缀的偏移量
+			delayTimeInputSuffixOffset: 0,
+			// 持续时间输入框后缀的偏移量
+			durationTimeInputSuffixOffset: 0,
+			// 重复次数输入框后缀的偏移量
+			repeatTimesInputSuffixOffset: 0,
+
+			// 与 props 区分, 便于双向更新值
+			p_delayTimeInputValue: this.delayTimeInputValue,
+			p_durationTimeInputValue: this.durationTimeInputValue,
+			p_repeatTimesInputValue: this.repeatTimesInputValue
+		}
+	},
+	watch: {
+		delayTimeInputValue(v) {
+			// 同步 props 与 state
+			this.p_delayTimeInputValue = v
+			// 更新输入框后缀的位置
+			this.delayTimeInputSuffixOffset = _getPxFromStr(v) + 12
+		},
+		durationTimeInputValue(v) {
+			this.p_durationTimeInputValue = v
+			this.durationTimeInputSuffixOffset = _getPxFromStr(v) + 12
+		},
+		repeatTimesInputValue(v) {
+			this.p_repeatTimesInputValue = v
+		},
+		delayTimeInputSuffixOffset(v) {
+			// 设置输入框后缀的样式
+			const $delaySuffix = this.$refs.delaySuffix
+
+			if ($delaySuffix) {
+				const styleObj = {
+					left: `${v}px`
+				}
+				const convertedStyleText = _convertObjToCSSText(styleObj)
+
+				$delaySuffix.style.cssText += convertedStyleText
+			}
+		},
+		durationTimeInputSuffixOffset(v) {
+			const $durationSuffix = this.$refs.durationSuffix
+
+			if ($durationSuffix) {
+				const styleObj = {
+					left: `${v}px`
+				}
+				const convertedStyleText = _convertObjToCSSText(styleObj)
+
+				$durationSuffix.style.cssText += convertedStyleText
+			}
+		}
 	},
 	methods: {
+		onReplaceNumWithEmptyStr(v) {
+			const RegExp_num = /\D/g
+
+			return `${v}`.replace(RegExp_num, '')
+		},
 		onActivityValueChange(v) {
 			this.$emit('onActivityValueChange', v)
 		},
@@ -180,7 +262,17 @@ export default {
 			}
 		},
 		onDelayTimeValueChange(v) {
+			// 去除 ms 后缀
+			v = v.replace('ms', '')
+
 			this.$emit('onDelayTimeValueChange', v)
+		},
+		onDelayTimeInputChange() {
+			this.p_delayTimeInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_delayTimeInputValue
+			)
+
+			this.$emit('onDelayTimeInputChange', this.p_delayTimeInputValue)
 		},
 		onDurationTimeInputFocus(e) {
 			const $target = e.target
@@ -190,7 +282,17 @@ export default {
 			}
 		},
 		onDurationTimeValueChange(v) {
+			// 去除 ms 后缀
+			v = v.replace('ms', '')
+
 			this.$emit('onDurationTimeValueChange', v)
+		},
+		onDurationTimeInputChange() {
+			this.p_durationTimeInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_durationTimeInputValue
+			)
+
+			this.$emit('onDurationTimeInputChange', this.p_durationTimeInputValue)
 		},
 		onRepeatTimesInputFocus(e) {
 			const $target = e.target
@@ -201,7 +303,23 @@ export default {
 		},
 		onRepeatTimesValueChange(v) {
 			this.$emit('onRepeatTimesValueChange', v)
+		},
+		onRepeatTimesInputChange() {
+			this.p_repeatTimesInputValue = this.onReplaceNumWithEmptyStr(
+				this.p_repeatTimesInputValue
+			)
+
+			this.$emit('onRepeatTimesInputChange', this.p_repeatTimesInputValue)
 		}
+	},
+	mounted() {
+		// 设置初始的偏移量
+		this.delayTimeInputSuffixOffset =
+			_getPxFromStr(this.delayTimeInputValue) + 12
+		this.durationTimeInputSuffixOffset =
+			_getPxFromStr(this.durationTimeInputValue) + 12
+		this.repeatTimesInputSuffixOffset =
+			_getPxFromStr(this.repeatTimesInputValue) + 12
 	}
 }
 </script>
@@ -215,26 +333,28 @@ export default {
 			cursor: default;
 
 			.item-tip-box {
+				width: 40px;
 				line-height: 30px;
 				span.item-tip-text {
 					color: #999;
 				}
 			}
 			.item-value-box {
-				margin-left: 20px;
+				width: 260px;
 				border: 1px solid transparent;
 				line-height: 30px;
 				transition: all 0.3s ease;
 				&:hover {
 					.config-item-value-box-hover;
 					.config-item-activity-button-icon-hover;
-					.config-item-activity-select-icon-hover;
 				}
 			}
 			.item-value-main {
 				display: flex;
+				position: relative;
 				input.value-show {
 					display: block;
+					width: 200px;
 					padding: 6px 12px;
 					border: none;
 					font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -246,9 +366,15 @@ export default {
 						.config-item-value-show-focus;
 					}
 				}
-				label.value-select {
+				span.value-suffix {
+					position: absolute;
+					left: 12px;
+					color: #5b6b73;
+				}
+				span.value-select {
 					display: block;
-					width: 28px;
+					width: 48px;
+					margin-left: 2px;
 					background-color: #ededed;
 					color: #666;
 					opacity: 0;
@@ -278,7 +404,7 @@ export default {
 			.value-main-select-box {
 				span.value-select {
 					display: block;
-					width: 28px;
+					width: 48px;
 					background-color: #fff;
 					color: #666;
 					opacity: 0;
@@ -301,13 +427,6 @@ export default {
 	.config-item-activity-button-icon-hover {
 		.value-button-icon {
 			opacity: 0;
-		}
-	}
-
-	// 动效框的 select 小图标的 hover
-	.config-item-activity-select-icon-hover {
-		.value-select-icon {
-			transform: rotateZ(180deg);
 		}
 	}
 
