@@ -84,7 +84,8 @@ export default {
 					const currentSelectedValue = this.currentValue
 
 					for (const [i, v] of $currentValueList.entries()) {
-						const pendingSelectValue = _trim(v.innerText)
+						// 去除 ms, 因为在选择条目之时, 已经过滤掉了 ms
+						const pendingSelectValue = _trim(v.innerText.replace('ms', ''))
 
 						if (pendingSelectValue === currentSelectedValue) {
 							this.relativeFieldObj.dom = v

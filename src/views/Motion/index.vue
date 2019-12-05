@@ -61,9 +61,9 @@ export default {
 			// 动效输入框的值
 			activityInputValue: DEFAULT_ANIMATION_TYPE_LIST[2],
 			// 延迟时间输入框的值
-			delayTimeInputValue: DEFAULT_ANIMATION_DELAY_TIME_LIST[0],
+			delayTimeInputValue: DEFAULT_ANIMATION_DELAY_TIME_LIST[0].replace('ms', ''),
 			// 持续时长输入框的值
-			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[3],
+			durationTimeInputValue: DEFAULT_ANIMATION_DURATION_TIME_LIST[3].replace('ms', ''),
 			// 重复次数输入框的值
 			repeatTimesInputValue: DEFAULT_ANIMATION_REPEAT_TIMES_LIST[0],
 		}

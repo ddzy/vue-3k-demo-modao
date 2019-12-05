@@ -262,6 +262,9 @@ export default {
 			}
 		},
 		onDelayTimeValueChange(v) {
+			// 去除 ms 后缀
+			v = v.replace('ms', '')
+
 			this.$emit('onDelayTimeValueChange', v)
 		},
 		onDelayTimeInputChange() {
@@ -279,6 +282,9 @@ export default {
 			}
 		},
 		onDurationTimeValueChange(v) {
+			// 去除 ms 后缀
+			v = v.replace('ms', '')
+
 			this.$emit('onDurationTimeValueChange', v)
 		},
 		onDurationTimeInputChange() {
