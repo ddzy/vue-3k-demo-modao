@@ -224,7 +224,7 @@ export default {
 			.tooltip-main-content-list {
 				.tooltip-main-content-item {
 					padding: 0 12px;
-					line-height: 40px;
+					line-height: 30px;
 					color: #fff;
 					cursor: pointer;
 					user-select: none;

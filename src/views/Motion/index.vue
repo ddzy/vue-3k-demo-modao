@@ -97,6 +97,10 @@ export default {
 		onRepeatTimesInputChange(v) {
 			this.repeatTimesInputValue = v
 		}
+	},
+	updated() {
+		// console.log(this);
+		// TODO: 对外暴露 window.output() 方法, 输出样式信息
 	}
 }
 </script>
