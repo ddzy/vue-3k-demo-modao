@@ -21,7 +21,7 @@ export const DEFAULT_ANIMATION_TYPE_LIST = [
 	'openDownLeft',
 	'openDownRight',
 	'perspectiveDown',
-	'rotateUp',
+	'rotateUp'
 ]
 
 /* 默认的动画延迟时间列表 */

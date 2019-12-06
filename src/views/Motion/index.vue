@@ -34,6 +34,8 @@
 <script>
 import MotionConfig from './components/Config/index'
 import MotionPreview from './components/Preview/index'
+import _getDOMStyle from '@/utils/getDOMStyle'
+import _convertObjToCSSText from '@/utils/convertObjToCSSText'
 import {
 	DEFAULT_ANIMATION_TYPE_LIST,
 	DEFAULT_ANIMATION_DELAY_TIME_LIST,
@@ -96,11 +98,88 @@ export default {
 		},
 		onRepeatTimesInputChange(v) {
 			this.repeatTimesInputValue = v
+		},
+
+		onUpdateByGlobal() {
+			window._output = options => {
+				for (const key in options) {
+					if (options.hasOwnProperty(key)) {
+						const value = options[key]
+
+						switch (key) {
+							case 'name': {
+								this.$nextTick(() => {
+									this.onActivityValueChange(value)
+								})
+								break
+							}
+							case 'delay': {
+								this.$nextTick(() => {
+									this.onDelayTimeValueChange(value)
+								})
+								break
+							}
+							case 'duration': {
+								this.$nextTick(() => {
+									this.onDurationTimeValueChange(value)
+								})
+								break
+							}
+							case 'repeat': {
+								this.$nextTick(() => {
+									this.onRepeatTimesValueChange(value)
+								})
+								break
+							}
+							default: {
+								break
+							}
+						}
+					}
+				}
+
+				const $animationEle = document.querySelector(
+					'#pMotion .preview-main-text'
+				)
+				let defaultStyleObj = {
+					'animation-delay': '',
+					'animation-direction': '',
+					'animation-duration': '',
+					'animation-fill-mode': '',
+					'animation-iteration-count': 0,
+					'animation-name': '',
+					'animation-play-state': '',
+					'animation-timing-function': '',
+					'-webkit-animation-delay': '',
+					'-webkit-animation-direction': '',
+					'-webkit-animation-duration': '',
+					'-webkit-animation-fill-mode': '',
+					'-webkit-animation-iteration-count': 0,
+					'-webkit-animation-name': '',
+					'-webkit-animation-play-state': '',
+					'-webkit-animation-timing-function': ''
+				}
+				const completeStyleObj = _getDOMStyle($animationEle)
+
+				for (const key in defaultStyleObj) {
+					if (defaultStyleObj.hasOwnProperty(key)) {
+						defaultStyleObj[key] = completeStyleObj[key]
+					}
+				}
+
+				// 生成动画样式字符串
+				const styleText = _convertObjToCSSText(defaultStyleObj)
+
+				return styleText
+			}
 		}
 	},
+	mounted() {
+		this.onUpdateByGlobal()
+	},
 	updated() {
-		// console.log(this);
 		// TODO: 对外暴露 window.output() 方法, 输出样式信息
+		this.onUpdateByGlobal()
 	}
 }
 </script>
