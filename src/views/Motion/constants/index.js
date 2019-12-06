@@ -1,12 +1,27 @@
 /* 默认的动画类型列表 */
 export const DEFAULT_ANIMATION_TYPE_LIST = [
+	'magic',
+	'twisterInDown',
+	'twisterInUp',
 	'swap',
 	'puffIn',
+	'puffOut',
 	'vanishIn',
 	'vanishOut',
-	'rotateUp',
+	'slideLeft',
+	'slideRight',
+	'swashOut',
 	'foolishIn',
-	'tinDownOut'
+	'tinLeftOut',
+	'tinDownOut',
+	'bombLeftOut',
+	'boingInUp',
+	'spaceOutUp',
+	'spaceOutLeft',
+	'openDownLeft',
+	'openDownRight',
+	'perspectiveDown',
+	'rotateUp'
 ]
 
 /* 默认的动画延迟时间列表 */
